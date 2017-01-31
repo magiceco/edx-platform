@@ -147,11 +147,8 @@ function($, Backbone, _, gettext, BaseView, BaseModal, XBlockInfoModel, MoveXBlo
 
         moveXBlock: function() {
             var self = this;
-            if (!self.isValidMove) {
-                return;
-            }
-
-            XBlockViewUtils.moveXBlock(self.sourceXBlockInfo.id, self.targetParentXBlockInfo.id)
+            if (self.isValidMove) {
+                XBlockViewUtils.moveXBlock(self.sourceXBlockInfo.id, self.targetParentXBlockInfo.id)
                 .done(function(response) {
                     if (response.move_source_locator) {
                         // hide modal
@@ -174,7 +171,8 @@ function($, Backbone, _, gettext, BaseView, BaseModal, XBlockInfoModel, MoveXBlo
                             ),
                             HtmlUtils.interpolateHtml(
                                 HtmlUtils.HTML(
-                                    '<a class="action-undo-move" href="#" data-source-display-name="{displayName}" ' +
+                                    '<a class="action-undo-move" href="#" ' +
+                                    'data-source-display-name="{displayName}" ' +
                                     'data-source-locator="{sourceLocator}" ' +
                                     'data-source-parent-locator="{sourceParentLocator}" ' +
                                     'data-target-index="{targetIndex}">{undoMove}</a>'
@@ -190,6 +188,7 @@ function($, Backbone, _, gettext, BaseView, BaseModal, XBlockInfoModel, MoveXBlo
                         );
                     }
                 });
+            }
         }
     });
 
