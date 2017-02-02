@@ -505,6 +505,15 @@ class StudentAccountLoginAndRegistrationTest(ThirdPartyAuthTestMixin, UrlResetMi
             'next': '/account/finish_auth?{}'.format(urlencode(params))
         })
 
+    @mock.patch.dict(settings.FEATURES, {"ALLOW_PUBLIC_ACCOUNT_CREATION": False})
+    def test_register_option_login_page(self):
+        """
+        Navigate to the login page and check the Register link is hidden when ALLOW_PUBLIC_ACCOUNT_CREATION
+        flag is turned off
+        """
+        response = self.client.get(reverse('signin_user'))
+        self.assertNotIn('<a class="btn-neutral" href="/register?next=%2Fdashboard">Register</a>', response.content)
+
 
 @override_settings(ECOMMERCE_API_URL=TEST_API_URL, ECOMMERCE_API_SIGNING_KEY=TEST_API_SIGNING_KEY)
 class AccountSettingsViewTest(ThirdPartyAuthTestMixin, TestCase, ProgramsApiConfigMixin):

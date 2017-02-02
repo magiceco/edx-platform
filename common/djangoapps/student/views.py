@@ -24,6 +24,7 @@ from django.contrib.auth.views import password_reset_confirm
 from django.contrib import messages
 from django.core.context_processors import csrf
 from django.core import mail
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, NoReverseMatch, reverse_lazy
 from django.core.validators import validate_email, ValidationError
 from django.db import IntegrityError, transaction
@@ -1545,6 +1546,10 @@ def _do_create_account(form, custom_form=None):
 
     Note: this function is also used for creating test users.
     """
+    # Check if ALLOW_PUBLIC_ACCOUNT_CREATION flag turned off to restrict user account creation
+    if not settings.FEATURES.get('ALLOW_PUBLIC_ACCOUNT_CREATION', False):
+        raise PermissionDenied()
+
     errors = {}
     errors.update(form.errors)
     if custom_form:
@@ -1710,7 +1715,10 @@ def create_account_with_params(request, params):
     # Perform operations within a transaction that are critical to account creation
     with transaction.atomic():
         # first, create the account
-        (user, profile, registration) = _do_create_account(form, custom_form)
+        try:
+            (user, profile, registration) = _do_create_account(form, custom_form)
+        except PermissionDenied:
+            raise
 
         # next, link the account with social auth, if provided via the API.
         # (If the user is using the normal register page, the social auth pipeline does the linking, not this code)
@@ -1966,6 +1974,10 @@ def create_account(request, post_override=None):
     JSON call to create new edX account.
     Used by form in signup_modal.html, which is included into navigation.html
     """
+    # Check if ALLOW_PUBLIC_ACCOUNT_CREATION flag turned off to restrict user account creation
+    if not settings.FEATURES.get('ALLOW_PUBLIC_ACCOUNT_CREATION', False):
+        return HttpResponseForbidden("Account creation not allowed.")
+
     warnings.warn("Please use RegistrationView instead.", DeprecationWarning)
 
     try:
@@ -2070,6 +2082,8 @@ def auto_auth(request):
         user.save()
         profile = UserProfile.objects.get(user=user)
         reg = Registration.objects.get(user=user)
+    except PermissionDenied:
+        return HttpResponseForbidden("Account creation not allowed.")
 
     # Set the user's global staff bit
     if is_staff is not None:

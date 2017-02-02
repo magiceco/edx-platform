@@ -1774,6 +1774,14 @@ class RegistrationViewTest(ThirdPartyAuthTestMixin, UserAPITestCase):
 
         self.assertContains(response, 'Kosovo')
 
+    @mock.patch.dict(settings.FEATURES, {"ALLOW_PUBLIC_ACCOUNT_CREATION": False})
+    def test_create_account_not_allowed(self):
+        """
+        Test case to check user creation is forbidden when ALLOW_PUBLIC_ACCOUNT_CREATION feature flag is turned off
+        """
+        response = self.client.post(self.url, {"email": self.EMAIL, "username": self.USERNAME})
+        self.assertEqual(response.status_code, 403)
+
 
 @httpretty.activate
 @ddt.ddt

@@ -302,6 +302,34 @@ class AuthTestCase(ContentStoreTestCase):
         # re-request, and we should get a redirect to login page
         self.assertRedirects(resp, settings.LOGIN_REDIRECT_URL + '?next=/home/')
 
+    @mock.patch.dict(settings.FEATURES, {"ALLOW_PUBLIC_ACCOUNT_CREATION": False})
+    def test_signup_button_index_page(self):
+        """
+        Navigate to the home page and check the Sign Up button is hidden when ALLOW_PUBLIC_ACCOUNT_CREATION flag
+        is turned off
+        """
+        response = self.client.get(reverse('homepage'))
+        self.assertNotIn('<a class="action action-signup" href="/signup">Sign Up</a>', response.content)
+
+    @mock.patch.dict(settings.FEATURES, {"ALLOW_PUBLIC_ACCOUNT_CREATION": False})
+    def test_signup_button_login_page(self):
+        """
+        Navigate to the login page and check the Sign Up button is hidden when ALLOW_PUBLIC_ACCOUNT_CREATION flag
+        is turned off
+        """
+        response = self.client.get(reverse('login'))
+        self.assertNotIn('<a class="action action-signup" href="/signup">Sign Up</a>', response.content)
+
+    @mock.patch.dict(settings.FEATURES, {"ALLOW_PUBLIC_ACCOUNT_CREATION": False})
+    def test_signup_link_login_page(self):
+        """
+        Navigate to the login page and check the Sign Up link is hidden when ALLOW_PUBLIC_ACCOUNT_CREATION flag
+        is turned off
+        """
+        response = self.client.get(reverse('login'))
+        self.assertNotIn('<a href="/signup" class="action action-signin">Don&#39;t have a Studio Account? Sign up!</a>',
+                         response.content)
+
 
 class ForumTestCase(CourseTestCase):
     def setUp(self):
