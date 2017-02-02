@@ -23,11 +23,11 @@ class TestLoginHelper(TestCase):
     def test_unsafe_next(self):
         """ Test unsafe next parameter """
         unsafe_url = "https://www.amazon.com"
-        with LogCapture(LOGGER_NAME, level=logging.ERROR) as logger:
+        with LogCapture(LOGGER_NAME, level=logging.WARNING) as logger:
             req = self.request.get(reverse("login") + "?next={url}".format(url=unsafe_url))
             get_next_url_for_login_page(req)
             logger.check(
-                (LOGGER_NAME, "ERROR", u"Unsafe redirect parameter detected: u'{url}'".format(url=unsafe_url))
+                (LOGGER_NAME, "WARNING", u"Unsafe redirect parameter detected: u'{url}'".format(url=unsafe_url))
             )
 
     def test_safe_next(self):
@@ -39,9 +39,9 @@ class TestLoginHelper(TestCase):
     def test_static_path_next(self):
         """ Test static assets are not accessible with next parameter. """
         static_assets = settings.STATIC_URL + "dummy.png"
-        with LogCapture(LOGGER_NAME, level=logging.ERROR) as logger:
+        with LogCapture(LOGGER_NAME, level=logging.WARNING) as logger:
             req = self.request.get(reverse("login") + "?next={url}".format(url=static_assets))
             get_next_url_for_login_page(req)
             logger.check(
-                (LOGGER_NAME, "ERROR", u"Unsafe redirect parameter detected: u'{url}'".format(url=static_assets))
+                (LOGGER_NAME, "WARNING", u"Unsafe redirect parameter detected: u'{url}'".format(url=static_assets))
             )
