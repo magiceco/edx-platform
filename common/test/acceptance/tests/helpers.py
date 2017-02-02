@@ -841,7 +841,7 @@ def assert_nav_help_link(test, page, href, signed_in=True):
     assert_opened_help_link_is_correct(test, href)
 
 
-def assert_side_bar_help_link(test, page, href, help_text, as_list_item=False, index=-1):
+def assert_side_bar_help_link(test, page, href, help_text, as_list_item=False, index=-1, keep_help_open=True):
     """
     Asserts that help link in side bar is correct.
 
@@ -867,6 +867,11 @@ def assert_side_bar_help_link(test, page, href, help_text, as_list_item=False, i
     assert_link(test, expected_link, actual_link)
     # Assert that opened link is correct
     assert_opened_help_link_is_correct(test, href)
+
+    if keep_help_open:
+        if page.browser.current_url.startswith('https://edx.readthedocs.io' or 'http://edx.readthedocs.io'):
+            page.browser.close()  # close only the current window
+            page.browser.switch_to_window(page.browser.window_handles[0])
 
 
 class TestWithSearchIndexMixin(object):
