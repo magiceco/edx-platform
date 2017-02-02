@@ -87,13 +87,13 @@ class TestReapplyTaskCommand(TestCase):
         self.assertIsNone(task_object.datetime_resolved)
 
     def test_call_command(self):
-        call_command(u'reapply_tasks')
+        call_command(u'old_reapply_tasks')
         self._assert_unresolved(models.FailedTask.objects.get(task_id=u'fail_again'))
         self._assert_resolved(models.FailedTask.objects.get(task_id=u'will_succeed'))
         self._assert_resolved(models.FailedTask.objects.get(task_id=u'other_task'))
 
     def test_call_command_with_specified_task(self):
-        call_command(u'reapply_tasks', u'--task-name={}'.format(self.fallible_task_name))
+        call_command(u'old_reapply_tasks', u'--task-name={}'.format(self.fallible_task_name))
         self._assert_unresolved(models.FailedTask.objects.get(task_id=u'fail_again'))
         self._assert_resolved(models.FailedTask.objects.get(task_id=u'will_succeed'))
         self._assert_unresolved(models.FailedTask.objects.get(task_id=u'other_task'))
@@ -108,7 +108,7 @@ class TestReapplyTaskCommand(TestCase):
         )
         # Verify that only one task got run for this task_id.
         with mock.patch.object(self.fallible_task, u'apply_async', wraps=self.fallible_task.apply_async) as mock_apply:
-            call_command(u'reapply_tasks')
+            call_command(u'old_reapply_tasks')
             task_id_counts = Counter(call[2][u'task_id'] for call in mock_apply.mock_calls)
             self.assertEqual(task_id_counts[u'will_succeed'], 1)
         # Verify that both tasks matching that task_id are resolved.

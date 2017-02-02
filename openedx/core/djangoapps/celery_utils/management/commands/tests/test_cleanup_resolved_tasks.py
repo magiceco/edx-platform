@@ -58,6 +58,6 @@ class TestCleanupResolvedTasksCommand(TestCase):
     )
     @ddt.unpack
     def test_call_command(self, args, remaining_task_ids):
-        call_command(u'cleanup_resolved_tasks', *args)
+        call_command(u'old_cleanup_resolved_tasks', *args)
         results = set(models.FailedTask.objects.values_list('task_id', flat=True))
         self.assertEqual(remaining_task_ids, results)

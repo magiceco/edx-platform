@@ -12,7 +12,7 @@ from logging import getLogger
 
 from courseware.model_data import get_score
 from lms.djangoapps.course_blocks.api import get_course_blocks
-from openedx.core.djangoapps.celery_utils.persist_on_failure import PersistOnFailureTask
+from celeryutils.persist_on_failure import PersistOnFailureTask
 from opaque_keys.edx.keys import UsageKey
 from opaque_keys.edx.locator import CourseLocator
 from submissions import api as sub_api
