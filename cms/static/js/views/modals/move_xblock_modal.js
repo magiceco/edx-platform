@@ -50,11 +50,8 @@ function($, Backbone, _, gettext, BaseView, BaseModal, XBlockInfoModel, MoveXBlo
                 $('.breadcrumb-container').removeClass('is-hidden');
                 self.renderViews(courseOutlineInfo, ancestorInfo);
             });
-            this.targetParentXBlockInfo = null;
             this.movedAlertView = null;
-            this.moveXBlockBreadcrumbView = null;
-            this.moveXBlockListView = null;
-            this.isValidMove  = false;
+            this.isValidMove = false;
             this.listenTo(Backbone, 'move:enableMoveOperation', this.enableMoveOperation);
         },
 
@@ -71,7 +68,6 @@ function($, Backbone, _, gettext, BaseView, BaseModal, XBlockInfoModel, MoveXBlo
 
         show: function() {
             BaseModal.prototype.show.apply(this, [false]);
-            Feedback.prototype.inFocus.apply(this, [this.options.modalWindowClass]);
             this.updateMoveState(false);
             MoveXBlockUtils.hideMovedNotification(Feedback);
         },

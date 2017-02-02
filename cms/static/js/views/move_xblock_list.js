@@ -119,12 +119,9 @@ function($, Backbone, _, gettext, HtmlUtils, StringUtils, XBlockUtils, MoveXBloc
             this.render();
         },
 
-<<<<<<< HEAD
         /**
          * Set parent and childs XBlock categories.
          */
-=======
->>>>>>> 075ea9b... refactoring tests
         setDisplayedXBlocksCategories: function() {
             this.parentInfo.category = XBlockUtils.getXBlockType(
                 this.parentInfo.parent.get('category'),
