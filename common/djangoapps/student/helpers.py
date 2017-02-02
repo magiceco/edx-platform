@@ -269,12 +269,12 @@ def get_redirect_to(request):
 
     :returns: redirect url if safe else None
     """
-    redirect_to = request.GET.get('next', None)
+    redirect_to = request.GET.get('next')
 
     # if we get a redirect parameter, make sure it's safe. If it's not, drop the
     # parameter.
     if redirect_to and (not http.is_safe_url(redirect_to) or settings.STATIC_URL in redirect_to):
-        log.error(
+        log.warning(
             u'Unsafe redirect parameter detected: %(redirect_to)r',
             {"redirect_to": redirect_to}
         )
