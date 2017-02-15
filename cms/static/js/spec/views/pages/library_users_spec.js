@@ -29,9 +29,9 @@ function($, AjaxHelpers, ViewHelpers, ManageUsersFactory, ViewUtils) {
                 ManageUsersFactory(
                     'Mock Library',
                     [
-                        {id: 1, email: 'honor@example.com', username: 'honor', role: 'staff'},
-                        {id: 2, email: 'audit@example.com', username: 'audit', role: 'instructor'},
-                        {id: 3, email: 'staff@example.com', username: 'staff', role: 'library_user'}
+                        {id: 1, email: 'honor@10make.com', username: 'honor', role: 'staff'},
+                        {id: 2, email: 'audit@10make.com', username: 'audit', role: 'instructor'},
+                        {id: 3, email: 'staff@10make.com', username: 'staff', role: 'library_user'}
                     ],
                     changeRoleUrl,
                     10000,
@@ -48,7 +48,7 @@ function($, AjaxHelpers, ViewHelpers, ManageUsersFactory, ViewUtils) {
             });
 
             it('can give a user permission to use the library', function() {
-                var email = 'other@example.com';
+                var email = 'other@10make.com';
                 var requests = AjaxHelpers.requests(this);
                 var reloadSpy = spyOn(ViewUtils, 'reload');
                 $('.create-user-button').click();
@@ -61,10 +61,10 @@ function($, AjaxHelpers, ViewHelpers, ManageUsersFactory, ViewUtils) {
             });
 
             it('can promote user', function() {
-                var email = 'staff@example.com';
+                var email = 'staff@10make.com';
                 var requests = AjaxHelpers.requests(this);
                 var reloadSpy = spyOn(ViewUtils, 'reload');
-                setRole('staff@example.com', 'staff');
+                setRole('staff@10make.com', 'staff');
                 AjaxHelpers.expectJsonRequest(requests, 'POST', getUrl(email), {role: 'staff'});
                 AjaxHelpers.respondWithJson(requests, {'result': 'ok'});
                 expect(reloadSpy).toHaveBeenCalled();
@@ -92,7 +92,7 @@ function($, AjaxHelpers, ViewHelpers, ManageUsersFactory, ViewUtils) {
                 var requests = AjaxHelpers.requests(this);
                 var promptSpy = ViewHelpers.createPromptSpy();
                 $('.create-user-button').click();
-                $('.user-email-input').val('honor@example.com');
+                $('.user-email-input').val('honor@10make.com');
                 $('.form-create.create-user .action-primary').click();
                 ViewHelpers.verifyPromptShowing(promptSpy, 'Already a library team member');
                 AjaxHelpers.expectNoRequests(requests);
@@ -103,7 +103,7 @@ function($, AjaxHelpers, ViewHelpers, ManageUsersFactory, ViewUtils) {
                 var requests = AjaxHelpers.requests(this);
                 var promptSpy = ViewHelpers.createPromptSpy();
                 var reloadSpy = spyOn(ViewUtils, 'reload');
-                var email = 'honor@example.com';
+                var email = 'honor@10make.com';
                 $('.user-item[data-email="' + email + '"] .action-delete .delete').click();
                 ViewHelpers.verifyPromptShowing(promptSpy, 'Are you sure?');
                 ViewHelpers.confirmPrompt(promptSpy);
@@ -124,9 +124,9 @@ function($, AjaxHelpers, ViewHelpers, ManageUsersFactory, ViewUtils) {
                 ManageUsersFactory(
                     'Mock Library',
                     [
-                        {id: 1, email: 'honor@example.com', username: 'honor', role: 'staff'},
-                        {id: 2, email: 'audit@example.com', username: 'audit', role: 'instructor'},
-                        {id: 3, email: 'staff@example.com', username: 'staff', role: 'library_user'}
+                        {id: 1, email: 'honor@10make.com', username: 'honor', role: 'staff'},
+                        {id: 2, email: 'audit@10make.com', username: 'audit', role: 'instructor'},
+                        {id: 3, email: 'staff@10make.com', username: 'staff', role: 'library_user'}
                     ],
                     'dummy_change_role_url',
                     10000,
